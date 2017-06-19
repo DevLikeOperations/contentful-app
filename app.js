@@ -5,10 +5,12 @@ var express = require("express");
 var logger = require("morgan");
 var app = express();
 var keys = require('./keys');
+var cors = require('cors');
 
 //Logs things in console
 app.use(logger('short'));
 
+app.use(cors());
 
 //Contentful's own http module
 var client = contentful.createClient({
