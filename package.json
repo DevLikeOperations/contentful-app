@@ -18,11 +18,10 @@
   "homepage": "https://github.com/CrisisTextLine/contentful-app#readme",
   "dependencies": {
     "contentful": "^4.4.3",
-    "cors": "^2.8.3",
     "express": "^4.15.3",
+    "marked": "^0.3.6",
     "morgan": "^1.8.2",
     "request": "^2.81.0",
-    "request-promise": "^4.2.1",
-    "showdown": "^1.7.1"
+    "request-promise": "^4.2.1"
   }
 }
