@@ -1,60 +1,78 @@
 
-var contentful = require("contentful");
-var express = require("express");
-var logger = require("morgan");
-var app = express();
-var keys = require('./keys');
-var marked = require('marked');
+const contentful = require("contentful");
+const express = require("express");
+const logger = require("morgan");
+const app = express();
+const keys = require('./keys');
+const marked = require('marked');
+const path = require('path');
+//const showdown = require('showdown');
+//const markdown = require('markdown').markdown;
 
 //Logs things in console
 app.use(logger('short'));
 
 //Contentful's own http module
-var client = contentful.createClient({
+const client = contentful.createClient({
 	space: keys.spaceid,
 	accessToken: keys.delivery_key,
 });
+
+//showdown.setFlavor('github');
+//const converter = new showdown.Converter();
+
 
 //Third party parses MD to HTML
 marked.setOptions({
   gfm: true,
   breaks: true,
+  tables: true,
+  smartypants:  true,
 });
 
-//Maps our contentID to a chapterNumber for our route unless we want to just use contentID
-var TableOfContents = {
-	"TESTING": 'GsCzOMyOEmWAGcQI2S8a4',
-	'1': '',
-	'2': '',
-	'3': '',
-	'4': '2lEZ1ZEq6k2E2swi4OseCa',
-	'5': '',
-	'6': '',
-};
-
-var get_chapter = (chapter_number) =>
+const get_entry = (entry_name) =>
 {
-	return client.getEntries({'sys.id': TableOfContents[chapter_number]}).then(function(res){
-		var info = res.items[0].fields;
-		var title = info.title;
-		var body = info.body;
-		var bodyHTML = marked(body); 
-		return bodyHTML;	
+	return client.getEntry(entry_name).then(function(entry){
+		const info = entry.fields;
+		const title = info.title;
+		const body = info.body;
+		//console.log(body);
+		const bodyHTML = marked(body); 
+		//const bodyHTML = converter.makeHtml(body);
+		//const bodyHTML = markdown.toHTML(body);
+		/*
+		// Let marked do its normal token generation.
+		tokens = marked.lexer( body );
+
+		// Mark all code blocks as already being escaped.
+		// This prevents the parser from encoding anything inside code blocks
+		tokens.forEach(function( token ) {
+		    if ( token.type === "code" ) {
+		        token.escaped = true;
+		    }
+		});
+
+		// Let marked do its normal parsing, but without encoding the code blocks
+		bodyHTML = marked.parser( tokens );
+		*/
+
+		console.log(bodyHTML);
+		return bodyHTML;
 	}).catch(function(e){
 		return e;
 	});
-};
+}
 
-app.get('/', function(req, res, next){
-    res.sendFile('./index.html', { root: __dirname });
+app.use(express.static(path.join(__dirname, 'build')));
 
+app.get('/:id', function (req, res) {
+	res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
 
-app.get('/:num', function(req, res, next){
-	var chapter_number = req.params.num;
-
-	get_chapter(chapter_number).then(function(chapterHTML){
-		res.json(chapterHTML);
+app.get('/api/:name', function(req, res, next){
+	const name = req.params.name;
+	get_entry(name).then(function(html){
+		res.json(html);	
 	}).catch(function(e){
 		res.json(e);
 	});

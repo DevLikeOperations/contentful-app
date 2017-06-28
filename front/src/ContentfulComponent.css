@@ -1,0 +1,41 @@
+#textbookContentContainer {
+	padding: 75px;
+}
+
+
+img{
+	border: 1px solid #ddd;
+}
+
+
+.inline-left{
+	vertical-align: middle;
+	display: inline;
+	float: left;
+}
+
+.inline-right{
+	vertical-align: middle;
+	display: inline;
+	float: left;
+}
+
+.inline-center{
+	vertical-align: middle;
+	display: table;
+}
+
+.icon{
+	vertical-align: middle;
+	border: 5px solid #ff0000;
+	padding: 2px;
+	height: 20px;
+
+}
+
+/* 
+Any class name containing 'icon'
+[class*= "icon"]{
+	border: 5px solid #ff0000;
+}
+*/
