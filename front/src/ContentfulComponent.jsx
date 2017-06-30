@@ -9,7 +9,8 @@ export default class ContentfulComponent extends Component {
 		textbookContent : ''
 	}
 
-	componentDidMount(){		
+	componentDidMount(){	
+		//This looks suepr hacky, no?	
 		const entry = window.location.pathname.slice(1);
 		axios.get(`/api/${entry}`).then(res => {
 					const data = res.data;

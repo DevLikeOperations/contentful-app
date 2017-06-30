@@ -36,26 +36,7 @@ const get_entry = (entry_name) =>
 		const info = entry.fields;
 		const title = info.title;
 		const body = info.body;
-		//console.log(body);
-		const bodyHTML = marked(body); 
-		//const bodyHTML = converter.makeHtml(body);
-		//const bodyHTML = markdown.toHTML(body);
-		/*
-		// Let marked do its normal token generation.
-		tokens = marked.lexer( body );
-
-		// Mark all code blocks as already being escaped.
-		// This prevents the parser from encoding anything inside code blocks
-		tokens.forEach(function( token ) {
-		    if ( token.type === "code" ) {
-		        token.escaped = true;
-		    }
-		});
-
-		// Let marked do its normal parsing, but without encoding the code blocks
-		bodyHTML = marked.parser( tokens );
-		*/
-
+		const bodyHTML = marked(body).replace(/&amp;/g,'&'); 
 		console.log(bodyHTML);
 		return bodyHTML;
 	}).catch(function(e){

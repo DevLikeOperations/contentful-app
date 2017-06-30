@@ -1,35 +1,63 @@
 #textbookContentContainer {
-	padding: 75px;
+	padding-left: 10%;
+	padding-right: 10%;
+	padding-top: 5%;
+
 }
-
-
-img{
-	border: 1px solid #ddd;
-}
-
 
 .inline-left{
-	vertical-align: middle;
 	display: inline;
-	float: left;
+  float: left;
+  padding: 15px;
 }
 
 .inline-right{
-	vertical-align: middle;
 	display: inline;
-	float: left;
+	float: right;
+  padding: 15px;
+
 }
 
 .inline-center{
-	vertical-align: middle;
 	display: table;
+	margin-left: auto;
+	margin-right: auto;
 }
 
 .icon{
 	vertical-align: middle;
-	border: 5px solid #ff0000;
 	padding: 2px;
-	height: 20px;
+	height: 25px;
+  	float: none;
+
+}
+/*
+blockquote {
+	width:60%;
+	padding-left: 70px;
+	padding-top: 18px;
+	padding-bottom: 18px;
+	padding-right: 10px;
+	background-color: #f2f2f2;
+	border-top: 1px solid #ccc;
+	border-bottom: 4px solid #ccc;
+	margin: 5px;
+	text-indent: 23px;
+} 
+*/
+
+
+table {
+    width: 75%;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+th {
+    height: 50px;
+    background-color: #ED1C24;
+    color: white;
+    font-weight: bold;
 
 }
 
