@@ -7,6 +7,8 @@ const keys = require('./keys');
 const marked = require('marked');
 const path = require('path');
 
+app.set('secret', keys.secret); 
+
 //Logs things in console
 app.use(logger('short'));
 
@@ -40,12 +42,18 @@ const get_entry = (entry_name) =>
 
 app.use(express.static(path.join(__dirname, 'build')));
 
-app.get('/:id', function (req, res) {
-	res.sendFile(path.join(__dirname, 'build', 'index.html'));
+app.get('/:id', function (req, res, next) {
+	const token = req.query.token;
+	if (token === app.get('secret')){
+		res.sendFile(path.join(__dirname, 'build', 'index.html'));
+	}else{
+		next();
+	}
 });
 
 app.get('/api/:name', function(req, res, next){
 	const name = req.params.name;
+
 	get_entry(name).then(function(html){
 		res.json(html);
 	}).catch(function(e){
@@ -57,3 +65,4 @@ app.get('/api/:name', function(req, res, next){
 app.listen(8081, function(){
 	console.log('Listening on route 8081!');
 });
+
