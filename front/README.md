@@ -1,3 +1,9 @@
+Make sure to npm install -g create-react-app
+
+Use npm run build to compile the 'build' folder that will be served by app.js.
+
+_____________________________________________
+
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
 
 Below you will find some information on how to perform common tasks.<br>
