@@ -30,7 +30,7 @@ const get_entry = (entry_name) =>
 		const info = entry.fields;
 		const title = info.title;
 		const body = info.body;
-		const bodyHTML = marked(body).replace(/&amp;/g,'&'); 
+		const bodyHTML = marked(body).replace(/&amp;/g,'&');
 		//console.log(bodyHTML);
 		return bodyHTML;
 	}).catch(function(e){
@@ -47,13 +47,13 @@ app.get('/:id', function (req, res) {
 app.get('/api/:name', function(req, res, next){
 	const name = req.params.name;
 	get_entry(name).then(function(html){
-		res.json(html);	
+		res.json(html);
 	}).catch(function(e){
 		res.json(e);
 	});
 });
 
 
-app.listen(8000, function(){
-	console.log('Listening on route 8000!');
+app.listen(8081, function(){
+	console.log('Listening on route 8081!');
 });

@@ -2,3 +2,4 @@ node_modules/
 .git*
 .DS*
 front/
+eb-deploy.sh
