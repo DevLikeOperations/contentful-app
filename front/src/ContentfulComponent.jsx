@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-//import renderHTML from 'react-render-html';
 import ReactHtmlParser from 'react-html-parser';
 import './ContentfulComponent.css';
 

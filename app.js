@@ -6,8 +6,6 @@ const app = express();
 const keys = require('./keys');
 const marked = require('marked');
 const path = require('path');
-//const showdown = require('showdown');
-//const markdown = require('markdown').markdown;
 
 //Logs things in console
 app.use(logger('short'));
@@ -17,10 +15,6 @@ const client = contentful.createClient({
 	space: keys.spaceid,
 	accessToken: keys.delivery_key,
 });
-
-//showdown.setFlavor('github');
-//const converter = new showdown.Converter();
-
 
 //Third party parses MD to HTML
 marked.setOptions({
@@ -36,15 +30,13 @@ const get_entry = (entry_name) =>
 		const info = entry.fields;
 		const title = info.title;
 		const body = info.body;
-		const bodyHTML = marked(body).replace(/&amp;/g,'&'); 
+		const bodyHTML = marked(body).replace(/&amp;/g,'&'); // Marked has problems with special characters.
 		console.log(bodyHTML);
 		return bodyHTML;
 	}).catch(function(e){
 		return e;
 	});
 }
-
-app.use(express.static(path.join(__dirname, 'build')));
 
 app.get('/:id', function (req, res) {
 	res.sendFile(path.join(__dirname, 'build', 'index.html'));
@@ -58,7 +50,6 @@ app.get('/api/:name', function(req, res, next){
 		res.json(e);
 	});
 });
-
 
 app.listen(8000, function(){
 	console.log('Listening on route 8000!');
