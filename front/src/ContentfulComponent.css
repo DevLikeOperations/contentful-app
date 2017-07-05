@@ -15,7 +15,6 @@
 	display: inline;
 	float: right;
   padding: 15px;
-
 }
 
 .inline-center{
@@ -29,23 +28,7 @@
 	padding: 2px;
 	height: 25px;
   	float: none;
-
 }
-/*
-blockquote {
-	width:60%;
-	padding-left: 70px;
-	padding-top: 18px;
-	padding-bottom: 18px;
-	padding-right: 10px;
-	background-color: #f2f2f2;
-	border-top: 1px solid #ccc;
-	border-bottom: 4px solid #ccc;
-	margin: 5px;
-	text-indent: 23px;
-} 
-*/
-
 
 table {
     width: 75%;
@@ -58,12 +41,9 @@ th {
     background-color: #ED1C24;
     color: white;
     font-weight: bold;
-
 }
 
-/* 
-Any class name containing 'icon'
-[class*= "icon"]{
-	border: 5px solid #ff0000;
+img{
+	max-width: 100%;
 }
-*/
+

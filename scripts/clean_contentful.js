@@ -8,14 +8,15 @@ const client = contentful.createClient({
 });
 
 /*
-Gets all entries in space and cleans. Be careful when calling this!
+Gets all entries in space and cleans. 
+
+TODO: avoid rate limiting.
 */
 const retrieveAndCleanAllEntries = () =>{
 	client.getSpace(keys.spaceid)
 	.then((space) => space.getEntries())
 	.then((entries) => cleanEntries(entries.items))
 	.catch(console.error)
-
 }
 
 const cleanEntries = (entries) => {
@@ -24,8 +25,13 @@ const cleanEntries = (entries) => {
 		if (contentType === 'subsection'){
 			cleanEntry(entry);
 		}
+		console.log('test');
 	});
+
 }
+
+
+
 
 const retrieveAndCleanSingleEntry = (id) =>{
 	client.getSpace(keys.spaceid)
@@ -35,12 +41,18 @@ const retrieveAndCleanSingleEntry = (id) =>{
 }
 
 const cleanEntry = (entry) => {
-	const body = entry.fields.body['en-US'];
-	const newBody = body.replace(/“|”/g, '"');
-	entry.fields.body['en-US'] = newBody;
-	entry.update();
+	if(!entry.fields.body){
+		return;
+	}
+	//const body = entry.fields.body['en-US'];
+	//const newBody = body.replace(/“|”/g, '"');
+	//entry.fields.body['en-US'] = newBody;
+	//entry.update();
+	entry.publish();
+
+
 }
 
-//retrieveAndCleanAllEntries();
+retrieveAndCleanAllEntries();
 
-retrieveAndCleanSingleEntry('6rbnW3XR0kO4I4MWqEIWOm');
+//retrieveAndCleanSingleEntry('6rbnW3XR0kO4I4MWqEIWOm');
