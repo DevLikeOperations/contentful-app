@@ -16,7 +16,7 @@ const MANAGEMENT = '{management api key};
 module.exports = {
 	spaceid: SPACE_ID,
 	delivery_key: DELIVERY,
-  preview: PREVIEW,
+	preview: PREVIEW,
 	management: MANAGEMENT
 };
 ```
