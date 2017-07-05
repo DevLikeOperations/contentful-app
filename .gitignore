@@ -2,3 +2,10 @@ node_modules
 keys.js
 build
 front/build
+*.log
+package-lock.json
+
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml
