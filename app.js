@@ -49,6 +49,15 @@ const get_entry = (entry_name) =>
 
 app.use(express.static(path.join(__dirname, 'build')));
 
+app.get('/', function (req, res, next) {
+	const token = req.query.token;
+	if (token === app.get('secret')){
+		res.send('Hello');
+	}else{
+		next();
+	}
+});
+
 app.get('/:id', function (req, res, next) {
 	const token = req.query.token;
 	if (token === app.get('secret')){
