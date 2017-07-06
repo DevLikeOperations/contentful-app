@@ -19,6 +19,7 @@
   "dependencies": {
     "contentful": "^4.4.3",
     "express": "^4.15.3",
+    "frameguard": "^3.0.0",
     "marked": "^0.3.6",
     "morgan": "^1.8.2",
     "request": "^2.81.0",
