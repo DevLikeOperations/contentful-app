@@ -6,6 +6,7 @@ const app = express();
 const keys = require('./keys');
 const marked = require('marked');
 const path = require('path');
+const frameguard = require('frameguard');
 
 app.set('secret', keys.secret); 
 
@@ -25,6 +26,12 @@ marked.setOptions({
   tables: true,
   smartypants:  true,
 });
+
+//Set x-frame-options to allow iframing from only our site
+app.use(frameguard({
+  action: 'allow-from',
+  domain: 'https://crisistextline.instructure.com/'
+}))
 
 const get_entry = (entry_name) =>
 {
