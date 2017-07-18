@@ -63,7 +63,8 @@ app.get('/:id', function (req, res, next) {
 	if(!referer){
 		next();
 	}
-	const baseReferer = referer.match(/^(.*?)\.com/g) ?? referer.match(/^(.*?)\.com/g)[0] : null;
+	regEx = /^(.*?)\.com\//g;
+	const baseReferer = referer.match(regEx) ? referer.match(regEx)[0] : null;
 
 	if (ALLOWED_BY.has(baseReferer)){
     	res.setHeader('X-Frame-Options', 'ALLOW-FROM ' + domain);
