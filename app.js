@@ -59,13 +59,20 @@ app.get('/hello', function (req, res, next) {
 
 app.get('/:id', function (req, res, next) {
 	const referer = req.header('Referer');
-	if (ALLOWED_BY.has(referer)){
-    		res.setHeader('X-Frame-Options', 'ALLOW-FROM ' + referer);
+
+	if(!referer){
+		next();
+	}
+	const baseReferer = referer.match(/^(.*?)\.com/g) ?? referer.match(/^(.*?)\.com/g)[0] : null;
+
+	if (ALLOWED_BY.has(baseReferer)){
+    	res.setHeader('X-Frame-Options', 'ALLOW-FROM ' + domain);
 		res.sendFile(path.join(__dirname, 'build', 'index.html'));
 	}else{
 		next();
 	}
 });
+
 
 app.get('/api/:name', function(req, res, next){
 	const name = req.params.name;
