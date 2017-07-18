@@ -27,11 +27,10 @@ marked.setOptions({
   smartypants:  true,
 });
 
-//Set x-frame-options to allow iframing from only our site
-app.use(frameguard({
-  action: 'allow-from',
-  domain: 'https://crisistextline.instructure.com/'
-}))
+const ALLOWED_BY = new Set([
+  'https://crisistextline.instructure.com/',
+  'https://home.crisistextline.org/'
+])
 
 const get_entry = (entry_name) =>
 {
@@ -59,8 +58,9 @@ app.get('/hello', function (req, res, next) {
 });
 
 app.get('/:id', function (req, res, next) {
-	const token = req.query.token;
-	if (token === app.get('secret')){
+	const referer = req.header('Referer');
+	if (ALLOWED_BY.has(referer)){
+    	res.setHeader('X-Frame-Options', 'ALLOW-FROM ' + domain);
 		res.sendFile(path.join(__dirname, 'build', 'index.html'));
 	}else{
 		next();
