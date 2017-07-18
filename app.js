@@ -60,7 +60,7 @@ app.get('/hello', function (req, res, next) {
 app.get('/:id', function (req, res, next) {
 	const referer = req.header('Referer');
 	if (ALLOWED_BY.has(referer)){
-    		res.setHeader('X-Frame-Options', 'ALLOW-FROM ' + domain);
+    		res.setHeader('X-Frame-Options', 'ALLOW-FROM ' + referer);
 		res.sendFile(path.join(__dirname, 'build', 'index.html'));
 	}else{
 		next();
