@@ -63,7 +63,7 @@ app.get('/:id', function (req, res, next) {
 	if(!referer){
 		next();
 	}
-	regEx = /^(.*?)\.com\//g;
+	const regEx = /^(.*?)\.com\//g;
 	const baseReferer = referer.match(regEx) ? referer.match(regEx)[0] : null;
 
 	if (ALLOWED_BY.has(baseReferer)){
