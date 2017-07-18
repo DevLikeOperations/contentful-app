@@ -67,7 +67,7 @@ app.get('/:id', function (req, res, next) {
 	const baseReferer = referer.match(regEx) ? referer.match(regEx)[0] : null;
 
 	if (ALLOWED_BY.has(baseReferer)){
-    	res.setHeader('X-Frame-Options', 'ALLOW-FROM ' + baseReferer);
+		res.setHeader('X-Frame-Options', 'ALLOW-FROM ' + baseReferer);
 		res.sendFile(path.join(__dirname, 'build', 'index.html'));
 	}else{
 		next();
