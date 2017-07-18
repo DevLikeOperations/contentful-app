@@ -29,7 +29,8 @@ marked.setOptions({
 
 const ALLOWED_BY = new Set([
   'https://crisistextline.instructure.com/',
-  'https://home.crisistextline.org/'
+  'https://home.crisistextline.org/',
+  'https://gsd-sendgrid.cs18.force.com/'
 ])
 
 const get_entry = (entry_name) =>
