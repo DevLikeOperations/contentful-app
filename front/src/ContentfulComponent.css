@@ -32,15 +32,30 @@
 
 table {
     width: 75%;
+    table-layout: fixed;
+
+    border: solid 1px;
+    border-collapse: collapse;
+    border-spacing: 0;
+
 	margin-left: auto;
 	margin-right: auto;
 }
 
+tbody{
+	vertical-align: text-top;
+}
 th {
     height: 50px;
+   	border: 1px solid black;
     background-color: #ED1C24;
     color: white;
     font-weight: bold;
+}
+
+td{
+   	border: 1px solid black;
+	padding: 10px;
 }
 
 img{

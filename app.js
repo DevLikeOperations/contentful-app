@@ -97,7 +97,6 @@ const getEntry = (entryId) =>
 		const title = info.title;
 		const body = info.body;
 		const bodyHTML = convertMarkdownToHTML(body);
-		//console.log(bodyHTML);
 		return bodyHTML;
 	}).catch(function(e){
 		return e;
@@ -130,7 +129,6 @@ const getTableOfContents = () =>
 			);
 
 		});
-		console.log(tableOfContents);
 		return tableOfContents;
 
 	}).catch(function(e){
