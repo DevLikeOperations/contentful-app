@@ -1,4 +1,3 @@
-
 const contentful = require("contentful");
 const express = require("express");
 const logger = require("morgan");
@@ -39,6 +38,7 @@ const ALLOWED_BY = new Set([
 
 app.use(express.static(path.join(__dirname, 'build')));
 
+/*
 const checkReferer = (req, res, next) => {
 	const referer = req.header('Referer');
 	if(referer == null){
@@ -54,6 +54,7 @@ const checkReferer = (req, res, next) => {
 	}
 };
 app.use(checkReferer);
+*/
 
 app.get('/api/contents', function(req,res,next){
 	getTableOfContents().then(function(tableOfContents){
@@ -131,7 +132,7 @@ const getTableOfContents = () =>
 		});
 		console.log(tableOfContents);
 		return tableOfContents;
-		
+
 	}).catch(function(e){
 		return e;
 	});

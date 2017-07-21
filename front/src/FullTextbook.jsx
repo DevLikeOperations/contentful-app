@@ -10,7 +10,7 @@ export default class FullTextbook extends Component {
 		textbookContent : ''
 	}
 
-	componentDidMount(){	
+	componentWillMount(){	
 		//Get all chapters
 		axios.get('/api/textbook').then(res => {
 				const textbookContent = res.data.join('<br>');
