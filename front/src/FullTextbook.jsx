@@ -22,8 +22,12 @@ export default class FullTextbook extends Component {
 
   render() {
     return (
-    	<div id="textbookContentContainer">
-    		{ReactHtmlParser(this.state.textbookContent)}
+    	<div>
+	    	<div id="textbookContentContainer">
+				<h1> The Textbook </h1>
+
+	    		{ReactHtmlParser(this.state.textbookContent)}
+	      	</div>
       	</div>
     );
   }
