@@ -29,8 +29,13 @@ marked.setOptions({
 
 const ALLOWED_BY = new Set([
   'https://crisistextline.instructure.com/',
-  'https://home.crisistextline.org/'
+  'https://home.crisistextline.org/',
+  'https://gsd-sendgrid.cs18.force.com/',
+  'https://crisistextline.okta.com/',
+  'https://ctlpreview.oktapreview.com/'
 ]);
+
+
 
 app.use(express.static(path.join(__dirname, 'build')));
 
@@ -126,12 +131,10 @@ const getTableOfContents = () =>
 		});
 		console.log(tableOfContents);
 		return tableOfContents;
-
-
+		
 	}).catch(function(e){
 		return e;
 	});
-
 }
 
 const getFullTextbook = () => {
