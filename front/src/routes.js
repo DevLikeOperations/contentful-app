@@ -1,11 +1,22 @@
 import React from 'react';
-import { Router, Route } from 'react-router';
+import { Router, Route, Switch} from 'react-router';
 
-import App from './App.js';
+import TableOfContents from './TableOfContents.jsx';
+import Subsection from './Subsection.jsx';
+import Chapter from './Chapter.jsx';
+import FullTextbook from './FullTextbook.jsx';
+
+import './ContentfulComponent.css';
+
 
 const Routes = (props) => (
   <Router {...props}>
-    <Route path="/" component={App} />
+  	<Switch>
+	   	<Route exact path="/" component={FullTextbook} />
+	   	<Route path="/contents" component={TableOfContents} />
+		<Route path="/chapter/:id" component={Chapter} />
+	    <Route path="/:id" component={Subsection} />
+    </Switch>
   </Router>
 );
 

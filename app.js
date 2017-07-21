@@ -30,15 +30,67 @@ marked.setOptions({
 const ALLOWED_BY = new Set([
   'https://crisistextline.instructure.com/',
   'https://home.crisistextline.org/'
-])
+]);
 
-const get_entry = (entry_name) =>
+app.use(express.static(path.join(__dirname, 'build')));
+
+const checkReferer = (req, res, next) => {
+	const referer = req.header('Referer');
+	if(referer == null){
+		res.end();
+	}
+	const regEx = /^(.*?)\.(com|org)\//g;
+	const baseReferer = referer.match(regEx) ? referer.match(regEx)[0] : null;
+
+	if (ALLOWED_BY.has(baseReferer)){
+		res.setHeader('X-Frame-Options', 'ALLOW-FROM ' + baseReferer);
+	}else{
+		res.end();
+	}
+};
+app.use(checkReferer);
+
+app.get('/api/contents', function(req,res,next){
+	getTableOfContents().then(function(tableOfContents){
+		res.json(tableOfContents);
+	});
+});
+
+app.get('/api/textbook', function(req, res, next){
+	getFullTextbook().then(function(fullTextbookHTML){
+		res.json(fullTextbookHTML)
+	});
+});
+
+app.get('/api/:id', function(req, res, next){
+	const name = req.params.id;
+
+	getEntry(name).then(function(html){
+		res.json(html);
+	}).catch(function(e){
+		res.json(e);
+	});
+});
+
+app.get('*', function (req, res, next) {
+	res.sendFile(path.join(__dirname, 'build', 'index.html'));
+});
+
+app.listen(8081, function(){
+	console.log('Listening on route 8081!');
+});
+
+
+const convertMarkdownToHTML = (text) =>{
+	return marked(text).replace(/&amp;/g,'&');
+}
+const getEntry = (entryId) =>
 {
-	return client.getEntry(entry_name).then(function(entry){
+	return client.getEntry(entryId).then(function(entry){
 		const info = entry.fields;
 		const title = info.title;
 		const body = info.body;
-		const bodyHTML = marked(body).replace(/&amp;/g,'&');
+		const bodyHTML = convertMarkdownToHTML(body);
 		//console.log(bodyHTML);
 		return bodyHTML;
 	}).catch(function(e){
@@ -46,46 +98,61 @@ const get_entry = (entry_name) =>
 	});
 }
 
-app.use(express.static(path.join(__dirname, 'build')));
+const getTableOfContents = () =>
+{
+	//unfortunately, getentry does not allow use of the include parameter so we will use getEntries
+	return client.getEntries({'sys.id': keys.textbook_id, include: 2}).then(function(response){
+		const theTextbook = response.items[0];
+		const chapters = theTextbook.fields.chapters;
 
-app.get('/hello', function (req, res, next) {
-	const token = req.query.token;
-	if (token === app.get('secret')){
-		res.send('Hello');
-	}else{
-		next();
-	}
-});
+		const tableOfContents = [];
 
-app.get('/:id', function (req, res, next) {
-	const referer = req.header('Referer');
+		chapters.forEach(function(chapter){
+			const chapterTitle = chapter.fields.title;
+			const chapterId = chapter.sys.id;
 
-	if(!referer){
-		next();
-	}
-	const regEx = /^(.*?)\.(com|org)\//g;
-	const baseReferer = referer.match(regEx) ? referer.match(regEx)[0] : null;
+			const subsections = chapter.fields.subsection.map(function(s){
+				return {title: s.fields.title};
+			});
 
-	if (ALLOWED_BY.has(baseReferer)){
-		res.setHeader('X-Frame-Options', 'ALLOW-FROM ' + baseReferer);
-		res.sendFile(path.join(__dirname, 'build', 'index.html'));
-	}else{
-		next();
-	}
-});
+			tableOfContents.push(
+				{
+					title: chapterTitle,
+					id: chapterId,
+					subsections
+				}
+			);
+
+		});
+		console.log(tableOfContents);
+		return tableOfContents;
 
 
-app.get('/api/:name', function(req, res, next){
-	const name = req.params.name;
-
-	get_entry(name).then(function(html){
-		res.json(html);
 	}).catch(function(e){
-		res.json(e);
+		return e;
 	});
-});
 
+}
 
-app.listen(8081, function(){
-	console.log('Listening on route 8081!');
-});
+const getFullTextbook = () => {
+	//unfortunately, getentry does not allow use of the include parameter so we will use getEntries
+	return client.getEntries({'sys.id': keys.textbook_id, include: 2}).then(function(response){
+		const theTextbook = response.items[0];
+		const chapters = theTextbook.fields.chapters;
+
+		const fullTextbookHTML = [];
+
+		chapters.forEach(function(chapter){
+			const chapterBody = convertMarkdownToHTML(chapter.fields.body);
+			fullTextbookHTML.push(chapterBody);
+
+			chapter.fields.subsection.forEach(function(subsec){
+				const subsectionBody = convertMarkdownToHTML(subsec.fields.body);
+				fullTextbookHTML.push(subsectionBody);
+			});
+
+		});
+		return fullTextbookHTML;
+	});
+}
+
