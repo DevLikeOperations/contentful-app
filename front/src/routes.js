@@ -12,7 +12,7 @@ import './ContentfulComponent.css';
 const Routes = (props) => (
   <Router {...props}>
   	<Switch>
-	   	<Route exact path="/" component={FullTextbook} />
+	   	<Route path="/textbook" component={FullTextbook} />
 	   	<Route path="/contents" component={TableOfContents} />
 		<Route path="/chapter/:id" component={Chapter} />
 	    <Route path="/:id" component={Subsection} />

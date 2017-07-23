@@ -2,19 +2,25 @@
 	padding-left: 10%;
 	padding-right: 10%;
 	padding-top: 5%;
-
 }
+
+#textbookHeader {
+	font-size: 3.5em;
+	border-bottom: 1px solid #313030;
+	padding-bottom: 0.3em;
+}
+
 
 .inline-left{
 	display: inline;
-  float: left;
-  padding: 15px;
+	float: left;
+	padding: 15px;
 }
 
 .inline-right{
 	display: inline;
 	float: right;
-  padding: 15px;
+	padding: 15px;
 }
 
 .inline-center{
