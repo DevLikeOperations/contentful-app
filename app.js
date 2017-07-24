@@ -49,6 +49,7 @@ const checkReferer = (req, res, next) => {
 
 	if (ALLOWED_BY.has(baseReferer)){
 		res.setHeader('X-Frame-Options', 'ALLOW-FROM ' + baseReferer);
+		next();
 	}else{
 		res.end();
 	}
