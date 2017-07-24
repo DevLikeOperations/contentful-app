@@ -38,7 +38,7 @@ const ALLOWED_BY = new Set([
 
 app.use(express.static(path.join(__dirname, 'build')));
 
-/*
+
 const checkReferer = (req, res, next) => {
 	const referer = req.header('Referer');
 	if(referer == null){
@@ -54,7 +54,7 @@ const checkReferer = (req, res, next) => {
 	}
 };
 app.use(checkReferer);
-*/
+
 
 app.get('/api/contents', function(req,res,next){
 	getTableOfContents().then(function(tableOfContents){
