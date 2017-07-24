@@ -31,7 +31,9 @@ const ALLOWED_BY = new Set([
   'https://home.crisistextline.org/',
   'https://gsd-sendgrid.cs18.force.com/',
   'https://crisistextline.okta.com/',
-  'https://ctlpreview.oktapreview.com/'
+  'https://ctlpreview.oktapreview.com/',
+  'https://contentfulapp-stage.ctlinternal.org/',
+  'https://contentfulapp-prod.ctlinternal.org/',
 ]);
 
 const refererAllowed = (req) => {
