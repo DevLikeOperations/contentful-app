@@ -35,7 +35,7 @@ const ALLOWED_BY = new Set([
 ]);
 
 const refererAllowed = (req) => {
-	const baseReferer = getBaseReferer();
+	const baseReferer = getBaseReferer(req);
 	if (ALLOWED_BY.has(baseReferer)){
 		return true;
 	}else{
