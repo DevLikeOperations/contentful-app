@@ -80,7 +80,7 @@ app.get('/api/:id', function(req, res, next){
 });
 
 app.get('*', function (req, res, next) {
-	//if(!refererAllowed(req)) return res.status(403).end();
+	if(!refererAllowed(req)) return res.status(403).end();
 
 	const baseReferer = getBaseReferer(req);
 	if(baseReferer != null){
