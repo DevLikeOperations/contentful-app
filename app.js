@@ -34,6 +34,24 @@ const ALLOWED_BY = new Set([
   'https://ctlpreview.oktapreview.com/'
 ]);
 
+const refererAllowed = (req) => {
+	const baseReferer = getBaseReferer(req);
+	if (ALLOWED_BY.has(baseReferer)){
+		return true;
+	}else{
+		return false;
+	}
+}
+
+const getBaseReferer = (req) => {
+	const referer = req.header('Referer');
+	if(referer == null){
+		return null;
+	}
+	const regEx = /^(.*?)\.(com|org)\//g;
+	const baseReferer = referer.match(regEx) ? referer.match(regEx)[0] : null;
+	return baseReferer;
+}
 
 
 app.use(express.static(path.join(__dirname, 'build')));
@@ -58,18 +76,21 @@ const checkReferer = (req, res, next) => {
 
 
 app.get('/api/contents', function(req,res,next){
+	if(!refererAllowed(req)) res.end();
 	getTableOfContents().then(function(tableOfContents){
 		res.json(tableOfContents);
 	});
 });
 
 app.get('/api/textbook', function(req, res, next){
+	if(!refererAllowed(req)) res.end();
 	getFullTextbook().then(function(fullTextbookHTML){
 		res.json(fullTextbookHTML)
 	});
 });
 
 app.get('/api/:id', function(req, res, next){
+	if(!refererAllowed(req)) res.end();
 	const name = req.params.id;
 
 	getEntry(name).then(function(html){
@@ -80,6 +101,12 @@ app.get('/api/:id', function(req, res, next){
 });
 
 app.get('*', function (req, res, next) {
+	if(!refererAllowed(req)) res.end();
+
+	const baseReferer = getBaseReferer(req);
+	if(baseReferer != null){
+		res.setHeader('X-Frame-Options', 'ALLOW-FROM ' + baseReferer);
+	}
 	res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
 
