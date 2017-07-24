@@ -53,6 +53,9 @@ const getBaseReferer = (req) => {
 
 app.use(express.static(path.join(__dirname, 'build')));
 
+app.get('/hello', function (req, res, next) {
+	res.send('Hello');
+});
 
 app.get('/api/contents', function(req,res,next){
 	if(!refererAllowed(req)) return res.status(403).end();
