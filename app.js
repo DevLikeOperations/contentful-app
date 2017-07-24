@@ -53,21 +53,21 @@ app.use(express.static(path.join(__dirname, 'build')));
 
 
 app.get('/api/contents', function(req,res,next){
-	if(!refererAllowed(req)) return res.status(403).end();
+	//if(!refererAllowed(req)) return res.status(403).end();
 	getTableOfContents().then(function(tableOfContents){
 		res.json(tableOfContents);
 	});
 });
 
 app.get('/api/textbook', function(req, res, next){
-	if(!refererAllowed(req)) return res.status(403).end();
+	//if(!refererAllowed(req)) return res.status(403).end();
 	getFullTextbook().then(function(fullTextbookHTML){
 		res.json(fullTextbookHTML)
 	});
 });
 
 app.get('/api/:id', function(req, res, next){
-	if(!refererAllowed(req)) return res.status(403).end();
+	//if(!refererAllowed(req)) return res.status(403).end();
 	const name = req.params.id;
 
 	getEntry(name).then(function(html){
@@ -78,7 +78,7 @@ app.get('/api/:id', function(req, res, next){
 });
 
 app.get('*', function (req, res, next) {
-	if(!refererAllowed(req)) return res.status(403).end();
+	//if(!refererAllowed(req)) return res.status(403).end();
 
 	const baseReferer = getBaseReferer(req);
 	if(baseReferer != null){
