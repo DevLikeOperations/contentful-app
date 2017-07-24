@@ -75,21 +75,21 @@ app.use(checkReferer);
 */
 
 app.get('/api/contents', function(req,res,next){
-	if(!refererAllowed()) res.end();
+	if(!refererAllowed(req)) res.end();
 	getTableOfContents().then(function(tableOfContents){
 		res.json(tableOfContents);
 	});
 });
 
 app.get('/api/textbook', function(req, res, next){
-	if(!refererAllowed()) res.end();
+	if(!refererAllowed(req)) res.end();
 	getFullTextbook().then(function(fullTextbookHTML){
 		res.json(fullTextbookHTML)
 	});
 });
 
 app.get('/api/:id', function(req, res, next){
-	if(!refererAllowed()) res.end();
+	if(!refererAllowed(req)) res.end();
 	const name = req.params.id;
 
 	getEntry(name).then(function(html){
@@ -100,9 +100,9 @@ app.get('/api/:id', function(req, res, next){
 });
 
 app.get('*', function (req, res, next) {
-	if(!refererAllowed()) res.end();
+	if(!refererAllowed(req)) res.end();
 
-	const baseReferer = getBaseReferer();
+	const baseReferer = getBaseReferer(req);
 	if(baseReferer != null){
 		res.setHeader('X-Frame-Options', 'ALLOW-FROM ' + baseReferer);
 	}
