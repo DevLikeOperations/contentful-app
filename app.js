@@ -54,7 +54,7 @@ const checkReferer = (req, res, next) => {
 		res.end();
 	}
 };
-app.use(checkReferer);
+//app.use(checkReferer);
 
 
 app.get('/api/contents', function(req,res,next){
