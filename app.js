@@ -53,44 +53,25 @@ const getBaseReferer = (req) => {
 	return baseReferer;
 }
 
-
 app.use(express.static(path.join(__dirname, 'build')));
 
 
-const checkReferer = (req, res, next) => {
-	const referer = req.header('Referer');
-	if(referer == null){
-		res.end();
-	}
-	const regEx = /^(.*?)\.(com|org)\//g;
-	const baseReferer = referer.match(regEx) ? referer.match(regEx)[0] : null;
-
-	if (ALLOWED_BY.has(baseReferer)){
-		res.setHeader('X-Frame-Options', 'ALLOW-FROM ' + baseReferer);
-		next();
-	}else{
-		res.end();
-	}
-};
-//app.use(checkReferer);
-
-
 app.get('/api/contents', function(req,res,next){
-	if(!refererAllowed(req)) res.end();
+	if(!refererAllowed(req)) res.status(404).end();
 	getTableOfContents().then(function(tableOfContents){
 		res.json(tableOfContents);
 	});
 });
 
 app.get('/api/textbook', function(req, res, next){
-	if(!refererAllowed(req)) res.end();
+	if(!refererAllowed(req)) res.status(404).end();
 	getFullTextbook().then(function(fullTextbookHTML){
 		res.json(fullTextbookHTML)
 	});
 });
 
 app.get('/api/:id', function(req, res, next){
-	if(!refererAllowed(req)) res.end();
+	if(!refererAllowed(req)) res.status(404).end();
 	const name = req.params.id;
 
 	getEntry(name).then(function(html){
