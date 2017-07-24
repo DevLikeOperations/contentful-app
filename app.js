@@ -57,21 +57,21 @@ app.use(express.static(path.join(__dirname, 'build')));
 
 
 app.get('/api/contents', function(req,res,next){
-	if(!refererAllowed(req)) res.status(403).end();
+	//if(!refererAllowed(req)) res.status(403).end();
 	getTableOfContents().then(function(tableOfContents){
 		res.json(tableOfContents);
 	});
 });
 
 app.get('/api/textbook', function(req, res, next){
-	if(!refererAllowed(req)) res.status(403).end();
+	//if(!refererAllowed(req)) res.status(403).end();
 	getFullTextbook().then(function(fullTextbookHTML){
 		res.json(fullTextbookHTML)
 	});
 });
 
 app.get('/api/:id', function(req, res, next){
-	if(!refererAllowed(req)) res.status(403).end();
+	//if(!refererAllowed(req)) res.status(403).end();
 	const name = req.params.id;
 
 	getEntry(name).then(function(html){
@@ -82,13 +82,32 @@ app.get('/api/:id', function(req, res, next){
 });
 
 app.get('*', function (req, res, next) {
-	if(!refererAllowed(req)) res.end();
+	/*if(!refererAllowed(req)) res.end();
 
 	const baseReferer = getBaseReferer(req);
 	if(baseReferer != null){
 		res.setHeader('X-Frame-Options', 'ALLOW-FROM ' + baseReferer);
 	}
+
 	res.sendFile(path.join(__dirname, 'build', 'index.html'));
+
+	*/
+
+	const referer = req.header('Referer');
+
+	if(!referer){
+		next();
+	}
+	const regEx = /^(.*?)\.(com|org)\//g;
+	const baseReferer = referer.match(regEx) ? referer.match(regEx)[0] : null;
+
+	if (ALLOWED_BY.has(baseReferer)){
+		res.setHeader('X-Frame-Options', 'ALLOW-FROM ' + baseReferer);
+		res.sendFile(path.join(__dirname, 'build', 'index.html'));
+	}else{
+		next();
+	}
+
 });
 
 app.listen(8081, function(){
