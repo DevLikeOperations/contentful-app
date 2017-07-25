@@ -58,7 +58,7 @@ app.get('/hello', function (req, res, next) {
 app.get('/api/contents', function(req,res,next){
 	//if(!refererAllowed(req)) return res.status(403).end();
 
-	if(!referrerAllowed(req)){
+	if(!refererAllowed(req)){
 		const baseReferer = getBaseReferer(req);
 		res.status(403).send({ error: "The base referer we received is: " + baseReferer });
 	}
@@ -69,7 +69,7 @@ app.get('/api/contents', function(req,res,next){
 
 app.get('/api/textbook', function(req, res, next){
 	//if(!refererAllowed(req)) return res.status(403).end();
-	if(!referrerAllowed(req)){
+	if(!refererAllowed(req)){
 		const baseReferer = getBaseReferer(req);
 		res.status(403).send({ error: "The base referer we received is: " + baseReferer });
 	}
@@ -81,7 +81,7 @@ app.get('/api/textbook', function(req, res, next){
 app.get('/api/:id', function(req, res, next){
 	//if(!refererAllowed(req)) return res.status(403).end();
 
-	if(!referrerAllowed(req)){
+	if(!refererAllowed(req)){
 		const baseReferer = getBaseReferer(req);
 		res.status(403).send({ error: "The base referer we received is: " + baseReferer });
 	}
