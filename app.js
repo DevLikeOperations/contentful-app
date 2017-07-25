@@ -60,7 +60,7 @@ app.get('/api/contents', function(req,res,next){
 
 	if(!referrerAllowed(req)){
 		const baseReferer = getBaseReferer(req);
-		res.status(500).send({ error: "The base referer we received is: " + baseReferer });
+		res.status(403).send({ error: "The base referer we received is: " + baseReferer });
 	}
 	getTableOfContents().then(function(tableOfContents){
 		res.json(tableOfContents);
@@ -71,7 +71,7 @@ app.get('/api/textbook', function(req, res, next){
 	//if(!refererAllowed(req)) return res.status(403).end();
 	if(!referrerAllowed(req)){
 		const baseReferer = getBaseReferer(req);
-		res.status(500).send({ error: "The base referer we received is: " + baseReferer });
+		res.status(403).send({ error: "The base referer we received is: " + baseReferer });
 	}
 	getFullTextbook().then(function(fullTextbookHTML){
 		res.json(fullTextbookHTML)
@@ -83,7 +83,7 @@ app.get('/api/:id', function(req, res, next){
 
 	if(!referrerAllowed(req)){
 		const baseReferer = getBaseReferer(req);
-		res.status(500).send({ error: "The base referer we received is: " + baseReferer });
+		res.status(403).send({ error: "The base referer we received is: " + baseReferer });
 	}
 	const name = req.params.id;
 
@@ -95,11 +95,13 @@ app.get('/api/:id', function(req, res, next){
 });
 
 app.get('*', function (req, res, next) {
-	//if(!refererAllowed(req)) return res.status(403).end();
+	//if(!refererAllowed(req)) return res.status(403).end();	
+	/*
 	if(!referrerAllowed(req)){
 		const baseReferer = getBaseReferer(req);
-		res.status(500).send({ error: "The base referer we received is: " + baseReferer });
+		res.status(403).send({ error: "The base referer we received is: " + baseReferer });
 	}
+	*/
 	const baseReferer = getBaseReferer(req);
 	if(baseReferer != null){
 		res.setHeader('X-Frame-Options', 'ALLOW-FROM ' + baseReferer);
