@@ -1,7 +1,7 @@
 module.exports = {
-  spaceid: process.env.SPACE_ID,
-  delivery_key: process.env.DELIVERY,
-  management: process.env.MANAGEMENT,
-  secret: process.env.SECRET,
-  textbook_id: process.env.TEXTBOOK_ID
+  textbook_space_id: process.env.TEXTBOOK_SPACE_ID,
+  textbook_delivery_key: process.env.TEXTBOOK_DELIVERY,
+  textbook_id: process.env.TEXTBOOK_ID,
+  community_space_id: process.env.COMMUNITY_SPACE_ID,
+  community_delivery_key: process.env.COMMUNITY_DELIVERY,
 };
