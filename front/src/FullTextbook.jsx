@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import ReactHtmlParser from 'react-html-parser';
-import './ContentfulComponent.css';
+import './ContentfulContent.css';
 
 
 export default class FullTextbook extends Component {
