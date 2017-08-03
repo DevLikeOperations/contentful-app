@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import './ContentfulComponent.css';
+import './ContentfulContent.css';
 
 
 export default class TableOfContents extends Component {
@@ -37,7 +37,7 @@ export default class TableOfContents extends Component {
 
 
 		return (
-			<div>
+			<div id="textbookContentContainer">
 				<h2>The Textbook</h2>
 				<h>Table of Contents</h>
 				<ul>
