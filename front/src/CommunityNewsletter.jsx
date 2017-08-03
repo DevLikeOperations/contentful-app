@@ -7,7 +7,8 @@ import './ContentfulContent.css';
 export default class CommunityNewsletter extends Component {
 
 	state ={
-		newsletterContent : ''
+		newsletterContent : '',
+		title:''
 	}
 
 	componentDidMount(){	
@@ -15,6 +16,8 @@ export default class CommunityNewsletter extends Component {
 		axios.get(`/api/community/${entry}`).then(res => {
 					const data = res.data;
 					this.setState({newsletterContent:data.body});
+					this.setState({articleContent:data.body,
+									title:data.title});
 				}).catch(e =>{
 					console.log(e);	
 		});
@@ -23,6 +26,9 @@ export default class CommunityNewsletter extends Component {
   render() {
     return (
     	<div id="textbookContentContainer">
+    		<div>
+				<h1 className="header">{this.state.title}</h1>
+    		</div>    		
     		{ReactHtmlParser(this.state.newsletterContent)}
       	</div>
     );

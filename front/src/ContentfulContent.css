@@ -6,8 +6,12 @@
 
 #textbookHeader {
 	font-size: 3.5em;
+}
+
+.header {
 	border-bottom: 1px solid #313030;
 	padding-bottom: 0.3em;
+
 }
 
 
