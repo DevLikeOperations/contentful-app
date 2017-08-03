@@ -83,7 +83,6 @@ const getCommunityEntry = (entryId) => {
 		const info = entry.fields;
 		const title = info.title;
 		const body = info.body;
-
 		const bodyHTML = convertMarkdownToHTML(body);
 		return {title, body:bodyHTML};
 	}).catch(function(e){

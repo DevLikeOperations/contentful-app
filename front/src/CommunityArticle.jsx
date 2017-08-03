@@ -7,14 +7,17 @@ import './ContentfulContent.css';
 export default class CommunityArticle extends Component {
 
 	state ={
-		articleContent : ''
+		articleContent : '',
+		title:''
+
 	}
 
 	componentDidMount(){	
 		const entry = this.props.match.params.id;
 		axios.get(`/api/community/${entry}`).then(res => {
 					const data = res.data;
-					this.setState({articleContent:data.body});
+					this.setState({articleContent:data.body,
+									title:data.title});
 				}).catch(e =>{
 					console.log(e);	
 				});
@@ -23,6 +26,9 @@ export default class CommunityArticle extends Component {
   render() {
     return (
     	<div id="textbookContentContainer">
+    		<div>
+				<h1 className="header">{this.state.title}</h1>
+    		</div>    		
     		{ReactHtmlParser(this.state.articleContent)}
       	</div>
     );
