@@ -31,7 +31,6 @@ export default class CommunityNewsletterArchive extends Component {
 
 		return (
 			<div id="textbookContentContainer">
-				<h2>Newsletters</h2>
 				<ul>
 					{renderedContents}
 				</ul>
