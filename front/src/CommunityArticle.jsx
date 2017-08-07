@@ -22,8 +22,12 @@ export default class CommunityArticle extends Component {
 
   render() {
     return (
-    	<div id="textbookContentContainer">	
-    		{ReactHtmlParser(this.state.articleContent)}
+    	<div class="community contentfulContainer">
+    		<div>
+				  <h1 className="header">{this.state.title}</h1>
+    		</div>    		
+    	  <div id="textbookContentContainer">	
+    		  {ReactHtmlParser(this.state.articleContent)}
       	</div>
     );
   }

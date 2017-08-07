@@ -1,9 +1,16 @@
-#textbookContentContainer {
+.contentfulContainer {
+
+}
+
+.textbook{
 	padding-left: 10%;
 	padding-right: 10%;
 	padding-top: 5%;
 }
 
+.community{
+
+}
 #textbookHeader {
 	font-size: 3.5em;
 }
