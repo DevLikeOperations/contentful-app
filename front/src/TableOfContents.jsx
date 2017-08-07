@@ -37,7 +37,7 @@ export default class TableOfContents extends Component {
 
 
 		return (
-			<div class="textbook contentfulContainer">
+			<div className="textbook contentfulContainer">
 				<h2>The Textbook</h2>
 				<h>Table of Contents</h>
 				<ul>

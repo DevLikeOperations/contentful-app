@@ -22,7 +22,7 @@ export default class FullTextbook extends Component {
 
   render() {
     return (
-    	<div class="textbook contentfulContainer">
+    	<div className="textbook contentfulContainer">
     		<div>
 				<h1 id="textbookHeader"> The Crisis Text Line Textbook </h1>
     		</div>
