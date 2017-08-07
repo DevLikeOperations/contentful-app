@@ -32,7 +32,7 @@ export default class CommunityNewsletterArchive extends Component {
 		return (
 			<div className="community contentfulContainer">
 				<h2>Newsletters</h2>
-				<div id="textbookContentContainer">
+				<div>
 					<ul>
 						{renderedContents}
 					</ul>

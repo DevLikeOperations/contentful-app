@@ -27,9 +27,8 @@ export default class CommunityNewsletter extends Component {
     return (
     	<div className="community contentfulContainer">
     		<div>
-				<h1 className="header">{this.state.title}</h1>
+    			{ReactHtmlParser(this.state.newsletterContent)}
     		</div>    		
-    		{ReactHtmlParser(this.state.newsletterContent)}
       	</div>
     );
   }
