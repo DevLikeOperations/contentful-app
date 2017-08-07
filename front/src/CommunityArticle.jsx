@@ -28,7 +28,8 @@ export default class CommunityArticle extends Component {
     		</div>    		
     	  <div id="textbookContentContainer">	
     		  {ReactHtmlParser(this.state.articleContent)}
-      	</div>
+	</div>
+	</div>
     );
   }
 }
