@@ -11,6 +11,12 @@
 .community{
 
 }
+
+div.community a{
+	target-name: new;
+	target-new: tab;
+}
+
 #textbookHeader {
 	font-size: 3.5em;
 }
