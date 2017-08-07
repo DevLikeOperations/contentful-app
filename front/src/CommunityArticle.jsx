@@ -25,7 +25,7 @@ export default class CommunityArticle extends Component {
 
   render() {
     return (
-    	<div id="textbookContentContainer">
+    	<div class="community contentfulContainer">
     		<div>
 				<h1 className="header">{this.state.title}</h1>
     		</div>    		

@@ -22,7 +22,7 @@ export default class TextbookContent extends Component {
 
   render() {
     return (
-    	<div id="textbookContentContainer">
+    	<div class="textbook contentfulContainer">
     		{ReactHtmlParser(this.state.textbookContent)}
       	</div>
     );
