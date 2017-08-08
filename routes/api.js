@@ -2,6 +2,7 @@ const express = require('express');
 const markymark = require('markymark');
 const contentful = require("contentful");
 const keys = require('../keys');
+const _ = require("underscore");
 
 
 var router = express.Router();
@@ -58,8 +59,16 @@ router.get('/community/newsletters', function(req,res,next){
 	}).catch(function(e){
 		res.json(e);
 	});
-	
 });
+
+router.get('/community/blah', function(req,res,next){
+	getCommunityNewsletters2().then(function(newslettersOrderedByDate){
+		res.json(newslettersOrderedByDate);
+	}).catch(function(e){
+		res.json(e);
+	});
+});
+
 
 router.get('/community/newsletters/:newsletterId', function(req, res, next){
 	const newsletterId = req.params.newsletterId;
@@ -96,6 +105,35 @@ const getCommunityNewsletters = () => {
 			return {title: newsletter.fields.title, id: newsletter.sys.id};
 		});
 		return newsletters;
+	}).catch(function(e){
+		return e;
+	})
+}
+
+const getCommunityNewsletters2 = () => {
+	return communityClient.getEntries({'content_type': 'newsletter', 'order' : 'fields.date'}).then(function(response){
+		const newsletters = response.items.map(function(newsletter){
+			return {title: newsletter.fields.title, id: newsletter.sys.id, date: newsletter.fields.date};
+		});
+
+		var newslettersGroupedByYear = _.groupBy(newsletters, function(newsletter){
+			const date = new Date(newsletter.date);
+			return date.getFullYear(); 
+		});
+
+
+		const newslettersGroupedByMonthAndYear = {};
+		for (var yearKey in newslettersGroupedByYear){
+			const newslettersInYear = newslettersGroupedByYear[yearKey];
+
+			newslettersGroupedByMonthAndYear[yearKey] = _.groupBy(newslettersInYear, function(newsletter){
+				const date = new Date(newsletter.date);
+				return date.getMonth(); 
+			});
+		}	
+
+		return newslettersGroupedByMonthAndYear;
+
 	}).catch(function(e){
 		return e;
 	})

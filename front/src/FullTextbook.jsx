@@ -20,17 +20,17 @@ export default class FullTextbook extends Component {
 			});
 	}
 
-  render() {
-    return (
-    	<div className="textbook contentfulContainer">
-    		<div>
-				<h1 id="textbookHeader"> The Crisis Text Line Textbook </h1>
-    		</div>
-	    	<div>
-	    		{ReactHtmlParser(this.state.textbookContent)}
+  	render() {
+	    return (
+	    	<div className="textbook contentfulContainer">
+	    		<div>
+					<h1 id="textbookHeader"> The Crisis Text Line Textbook </h1>
+	    		</div>
+		    	<div>
+		    		{ReactHtmlParser(this.state.textbookContent)}
+		      	</div>
 	      	</div>
-      	</div>
-    );
+	    );
   }
 }
 
