@@ -63,8 +63,8 @@ router.get('/community/newsletters', function(req,res,next){
 
 router.get('/community/newsletters/:newsletterId', function(req, res, next){
 	const newsletterId = req.params.newsletterId;
-	getCommunityEntry(newsletterId).then(function(newsletterHTML){
-		res.json(newsletterHTML);
+	getCommunityEntry(newsletterId).then(function(entry){
+		res.json(entry);
 	}).catch(function(e){
 		res.json(e);
 	});
@@ -83,8 +83,9 @@ const getCommunityEntry = (entryId) => {
 		const info = entry.fields;
 		const title = info.title;
 		const body = info.body;
+		const date = info.date;
 		const bodyHTML = convertMarkdownToHTML(body);
-		return {title, body:bodyHTML};
+		return {title, body:bodyHTML, date};
 	}).catch(function(e){
 		return e;
 	});

@@ -82,7 +82,7 @@ class NewsletterSection extends React.Component {
 		      	</article>
 		    </div>
 			)
-		});
+		}).reverse();
 
     return (
     	<div>

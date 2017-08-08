@@ -2,22 +2,27 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import ReactHtmlParser from 'react-html-parser';
 import './ContentfulContent.css';
-
+import moment from 'moment';
 
 export default class CommunityNewsletter extends Component {
 
 	state ={
 		newsletterContent : '',
-		title:''
+		title:'',
+		date: '',
 	}
 
 	componentDidMount(){	
 		const entry = this.props.match.params.id;
 		axios.get(`/api/community/${entry}`).then(res => {
 					const data = res.data;
-					this.setState({newsletterContent:data.body});
-					this.setState({articleContent:data.body,
-									title:data.title});
+					const newsletterContent = data.body;
+					const title = data.title;
+					const date = moment(data.date).format("MMMM Do, YYYY");
+					this.setState({newsletterContent,
+									title,
+									date
+								});
 				}).catch(e =>{
 					console.log(e);	
 		});
@@ -26,6 +31,9 @@ export default class CommunityNewsletter extends Component {
   render() {
     return (
     	<div className="community contentfulContainer">
+			<div className="header">
+    			<h1>{this.state.date}</h1>
+    		</div>
     		<div>
     			{ReactHtmlParser(this.state.newsletterContent)}
     		</div>    		
