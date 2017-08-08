@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import './ContentfulContent.css';
 import { Link } from 'react-router-dom';
-import './newsletters2.css';
+import './CommunityNewsletterArchive.css';
 
 export default class CommunityNewsletterArchive extends Component {
 
@@ -11,7 +11,7 @@ export default class CommunityNewsletterArchive extends Component {
 	}
 
 	componentDidMount(){
-		axios.get('/api/community/blah').then(res => {
+		axios.get('/api/community/newsletters').then(res => {
 					const newsletters = res.data;
 					this.setState({newsletters});
 				}).catch(e =>{
@@ -21,23 +21,12 @@ export default class CommunityNewsletterArchive extends Component {
 
 
   	render() {
-		const renderedContents = [];
-
-		/*
-		this.state.newsletters.forEach(function(newsletter){
-			const route = '/community/newsletters/' + newsletter.id;
-			const newsletterLink = <li> <Link to={route}> {newsletter.title} </Link></li>;
-			renderedContents.push(newsletterLink);
-		});
-		*/
-
- return (
-	<div className="community contentfulContainer">
-    <h1>Newsletters</h1>
-      <section className="container">
-      	<NewsletterSection newslettersByYear={this.state.newsletters}> </NewsletterSection>
-      </section>
- 	</div>
+ 	return (
+		<div className="community contentfulContainer">
+	      <section className="container">
+	      	<NewsletterSection newslettersByYear={this.state.newsletters}> </NewsletterSection>
+	      </section>
+	 	</div>
     );
 	}
 }
@@ -57,11 +46,8 @@ class NewsletterSection extends React.Component {
 		const years = this.props.newslettersByYear;
 
 		const renderedSections = Object.keys(years).map(function(year, count){
-
 			const tag = `ac-${year}`;
-
 			const newslettersByMonth = years[year];
-
 			const renderedSubsections = Object.keys(newslettersByMonth).map(function(month, count){
 				const subtag = `${tag}-${count}`;
 
@@ -69,7 +55,7 @@ class NewsletterSection extends React.Component {
 				const newsletterLinks = newsletters.map(function(newsletter){
 					const route = '/community/newsletters/' + newsletter.id;
 					return(
-					 	<li> <Link to={route}> {newsletter.title} </Link></li>
+					 	<li> <Link to={route}> {newsletter.title} </Link> </li>
 					);
 				});
 
@@ -90,7 +76,9 @@ class NewsletterSection extends React.Component {
 				<input className="ac-input" id={tag} name={tag} type="checkbox" />
 				<label className="ac-label" htmlFor={tag}>{year}</label>
 				<article className="ac-text">
+					<ul>
 					{renderedSubsections}
+					</ul>
 		      	</article>
 		    </div>
 			)

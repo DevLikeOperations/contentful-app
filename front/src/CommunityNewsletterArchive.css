@@ -12,6 +12,10 @@ h3 {
   font-weight: 300;
 }
 
+ul li {
+  list-style-type: none;
+}
+
 .container {
   width: 70%;
 }

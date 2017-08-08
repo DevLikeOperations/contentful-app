@@ -61,15 +61,6 @@ router.get('/community/newsletters', function(req,res,next){
 	});
 });
 
-router.get('/community/blah', function(req,res,next){
-	getCommunityNewsletters2().then(function(newslettersOrderedByDate){
-		res.json(newslettersOrderedByDate);
-	}).catch(function(e){
-		res.json(e);
-	});
-});
-
-
 router.get('/community/newsletters/:newsletterId', function(req, res, next){
 	const newsletterId = req.params.newsletterId;
 	getCommunityEntry(newsletterId).then(function(newsletterHTML){
@@ -99,18 +90,8 @@ const getCommunityEntry = (entryId) => {
 	});
 }
 
-const getCommunityNewsletters = () => {
-	return communityClient.getEntries({'content_type': 'newsletter', 'order' : 'fields.date'}).then(function(response){
-		const newsletters = response.items.map(function(newsletter){
-			return {title: newsletter.fields.title, id: newsletter.sys.id};
-		});
-		return newsletters;
-	}).catch(function(e){
-		return e;
-	})
-}
 
-const getCommunityNewsletters2 = () => {
+const getCommunityNewsletters = () => {
 	return communityClient.getEntries({'content_type': 'newsletter', 'order' : 'fields.date'}).then(function(response){
 		const newsletters = response.items.map(function(newsletter){
 			return {title: newsletter.fields.title, id: newsletter.sys.id, date: newsletter.fields.date};
