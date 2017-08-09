@@ -173,19 +173,22 @@ const getFullTextbook = () => {
 		const theTextbook = response.items[0];
 		const chapters = theTextbook.fields.chapters;
 
-		const fullTextbookHTML = [];
+		const fullTextbookObjects = [];
 
 		chapters.forEach(function(chapter){
-			const chapterBody = convertMarkdownToHTML(chapter.fields.body);
-			fullTextbookHTML.push(chapterBody);
-
+			const subsections = [];
 			chapter.fields.subsection.forEach(function(subsec){
 				const subsectionBody = convertMarkdownToHTML(subsec.fields.body);
-				fullTextbookHTML.push(subsectionBody);
+				subsections.push({id: subsec.sys.id, title: subsec.fields.title, html: subsectionBody});
 			});
 
+			const chapterBody = convertMarkdownToHTML(chapter.fields.body);
+			fullTextbookObjects.push({id: chapter.sys.id, title: chapter.fields.title, html: chapterBody, subsections});
+
+
+
 		});
-		return fullTextbookHTML;
+		return fullTextbookObjects;
 	});
 }
 
