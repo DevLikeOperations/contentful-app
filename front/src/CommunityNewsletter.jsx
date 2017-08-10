@@ -18,7 +18,7 @@ export default class CommunityNewsletter extends Component {
 					const data = res.data;
 					const newsletterContent = data.body;
 					const title = data.title;
-					const date = moment(data.date).format("MMMM Do, YYYY");
+					const date = moment(data.date).format("MMMM D, YYYY");
 					this.setState({newsletterContent,
 									title,
 									date
