@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import ReactHtmlParser from 'react-html-parser';
 import { HashLink as Link } from 'react-router-hash-link';
-import './ContentfulContent.css';
+import './css/ContentfulContent.css';
 
 
 export default class FullTextbook extends Component {

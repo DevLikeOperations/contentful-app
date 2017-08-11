@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import './ContentfulContent.css';
+import './css/ContentfulContent.css';
+import './css/CommunityNewsletterArchive.css';
 import { Link } from 'react-router-dom';
-import './CommunityNewsletterArchive.css';
 
 export default class CommunityNewsletterArchive extends Component {
 
@@ -19,15 +19,14 @@ export default class CommunityNewsletterArchive extends Component {
 				});
 	}
 
-
   	render() {
- 	return (
-		<div className="community contentfulContainer">
-	      <section className="container">
-	      	<NewsletterSection newslettersByYear={this.state.newsletters}> </NewsletterSection>
-	      </section>
-	 	</div>
-    );
+	 	return (
+			<div className="community contentfulContainer">
+		      <section className="container">
+		      	<NewsletterSection newslettersByYear={this.state.newsletters}> </NewsletterSection>
+		      </section>
+		 	</div>
+	    );
 	}
 }
 
@@ -39,7 +38,6 @@ class NewsletterSection extends React.Component {
 		
 	}
 	render() {
-
 		const monthNames = ["January", "February", "March", "April", "May", "June",
   					"July", "August", "September", "October", "November", "December"
 		];
@@ -72,15 +70,15 @@ class NewsletterSection extends React.Component {
 			});
 
 			return(
-		    <div className="ac">
-				<input className="ac-input" id={tag} name={tag} type="checkbox" />
-				<label className="ac-label" htmlFor={tag}>{year}</label>
-				<article className="ac-text">
-					<ul>
-					{renderedSubsections}
-					</ul>
-		      	</article>
-		    </div>
+			    <div className="ac">
+					<input className="ac-input" id={tag} name={tag} type="checkbox" />
+					<label className="ac-label" htmlFor={tag}>{year}</label>
+					<article className="ac-text">
+						<ul>
+						{renderedSubsections}
+						</ul>
+			      	</article>
+			    </div>
 			)
 		}).reverse();
 

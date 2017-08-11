@@ -8,7 +8,7 @@ import CommunityArticle from './CommunityArticle.jsx';
 import CommunityNewsletterArchive from './CommunityNewsletterArchive.jsx';
 import CommunityNewsletter from './CommunityNewsletter.jsx';
 
-import './ContentfulContent.css';
+import './css/ContentfulContent.css';
 
 
 const Routes = (props) => (

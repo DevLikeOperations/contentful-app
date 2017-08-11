@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import './ContentfulContent.css';
+import './css/ContentfulContent.css';
 
 
 export default class TableOfContents extends Component {
@@ -25,7 +25,6 @@ export default class TableOfContents extends Component {
 
 		this.state.chapters.forEach(function(chapter){
 			const chapterLink = <li>{chapter.title}</li>;
-
 			renderedContents.push(chapterLink);
 
 			chapter.subsections.forEach(function(subsection){
@@ -34,7 +33,6 @@ export default class TableOfContents extends Component {
 			});
 
 		});
-
 
 		return (
 			<div className="textbook contentfulContainer">
