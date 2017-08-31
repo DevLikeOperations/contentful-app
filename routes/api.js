@@ -20,7 +20,7 @@ markymark.setOptions({
 });
 
 //Contentful's own http module
-const client = contentful.createClient({
+const textbookClient = contentful.createClient({
 	space: keys.textbook_space_id,
 	accessToken: keys.textbook_delivery_key,
 });
@@ -30,67 +30,54 @@ const communityClient = contentful.createClient({
 	accessToken: keys.community_delivery_key,
 });
 
-
-router.get('/contents', function(req,res,next){
-	getTableOfContents().then(function(tableOfContents){
-		res.json(tableOfContents);
-	});
+const wellnessClient = contentful.createClient({
+	space: keys.wellness_space_id,
+	accessToken: keys.wellness_delivery_key,
 });
 
-router.get('/textbook', function(req, res, next){
-	getFullTextbook().then(function(fullTextbookHTML){
-		res.json(fullTextbookHTML)
-	});
-});
+router.get('/contents', getMiddlewareFunction(getTableOfContents));
+router.get('/textbook', getMiddlewareFunction(getFullTextbook));
+router.get('/:id', getMiddlewareFunction(getTextbookEntry, 'id'));
+router.get('/community/newsletters', getMiddlewareFunction(getCommunityNewsletters));
+router.get('/community/newsletters/:newsletterId', getMiddlewareFunction(getCommunityEntry, 'newsletterId'));
+router.get('/community/:articleId', getMiddlewareFunction(getCommunityEntry, 'articleId'));
+router.get('/wellness/:articleId', getMiddlewareFunction(getWellnessEntry, 'articleId'));
 
-router.get('/:id', function(req, res, next){
-	const id = req.params.id;
-
-	getEntry(id).then(function(html){
-		res.json(html);
-	}).catch(function(e){
-		res.json(e);
-	});
-});
-
-router.get('/community/newsletters', function(req,res,next){
-	getCommunityNewsletters().then(function(newslettersOrderedByDate){
-		res.json(newslettersOrderedByDate);
-	}).catch(function(e){
-		res.json(e);
-	});
-});
-
-router.get('/community/newsletters/:newsletterId', function(req, res, next){
-	const newsletterId = req.params.newsletterId;
-	getCommunityEntry(newsletterId).then(function(entry){
-		res.json(entry);
-	}).catch(function(e){
-		res.json(e);
-	});
-});
-
-router.get('/community/:articleId', function(req,res,next){
-	const articleId = req.params.articleId;
-	getCommunityEntry(articleId).then(function(articleHTML){
-		res.json(articleHTML);
-	}).catch(function(e){
-		res.json(e);
-	});
-});
-const getCommunityEntry = (entryId) => {
-	return communityClient.getEntry(entryId).then(function(entry){
-		const info = entry.fields;
-		const title = info.title;
-		const body = info.body;
-		const date = info.date;
-		const bodyHTML = convertMarkdownToHTML(body);
-		return {title, body:bodyHTML, date};
-	}).catch(function(e){
-		return e;
-	});
+const getMiddlewareFunction = (retrieveContent, contentIdParameter) => {
+	return (req, res, next) => {
+		const contentId = (contentIdParameter) ? req.params[contentIdParameter] : null;
+		retrieveContent(contentId)
+			.then(content => {
+				res.json(content);
+			}).catch(e => {
+				res.json(e);
+			})
+	}
 }
 
+const getTextbookEntry = (entryId) => {
+	return textbookClient.getEntry(entryId)
+		.then(getEntryHtml)
+		.catch(function(e){
+			return e;
+		});
+}
+
+const getCommunityEntry = (entryId) => {
+	return communityClient.getEntry(entryId)
+		.then(getEntryJson)
+		.catch(function(e){
+			return e;
+		});
+}
+
+const getWellnessEntry = (entryId) => {
+	return wellnessClient.getEntry(entryId)
+		.then(getEntryJson)
+		.catch(function(e){
+			return e;
+		});
+}
 
 const getCommunityNewsletters = () => {
 	return communityClient.getEntries({'content_type': 'newsletter', 'order' : 'fields.date'}).then(function(response){
@@ -121,23 +108,32 @@ const getCommunityNewsletters = () => {
 	})
 }
 
-const getEntry = (entryId) =>
-{
-	return client.getEntry(entryId).then(function(entry){
-		const info = entry.fields;
-		const title = info.title;
-		const body = info.body;
-		const bodyHTML = convertMarkdownToHTML(body);
-		return bodyHTML;
-	}).catch(function(e){
-		return e;
-	});
+const getEntry = (client, entryId) => {
+	return client.getEntry(entryId)
+		.then(getEntryHtml)
+		.catch(function(e){
+			return e;
+		});
 }
 
-const getTableOfContents = () =>
-{
+const getEntryHtml = entry => {
+	const info = entry.fields;
+	const bodyHTML = convertMarkdownToHTML(info.body);
+	return bodyHTML;
+}
+
+const getEntryJson = entry => {
+	const info = entry.fields;
+	const title = info.title;
+	const body = info.body;
+	const date = info.date;
+	const bodyHTML = convertMarkdownToHTML(body);
+	return {title, body:bodyHTML, date};
+}
+
+const getTableOfContents = () => {
 	//unfortunately, getentry does not allow use of the include parameter so we will use getEntries
-	return client.getEntries({'sys.id': keys.textbook_id, include: 2}).then(function(response){
+	return textbookClient.getEntries({'sys.id': keys.textbook_id, include: 2}).then(function(response){
 		const theTextbook = response.items[0];
 		const chapters = theTextbook.fields.chapters;
 
@@ -169,7 +165,7 @@ const getTableOfContents = () =>
 
 const getFullTextbook = () => {
 	//unfortunately, getentry does not allow use of the include parameter so we will use getEntries
-	return client.getEntries({'sys.id': keys.textbook_id, include: 2}).then(function(response){
+	return textbookClient.getEntries({'sys.id': keys.textbook_id, include: 2}).then(function(response){
 		const theTextbook = response.items[0];
 		const chapters = theTextbook.fields.chapters;
 
