@@ -26,7 +26,7 @@ router.get('/community/newsletters/:newsletterId', getMiddlewareFunction(getComm
 router.get('/community/:articleId', getMiddlewareFunction(getCommunityEntry, 'articleId'));
 router.get('/wellness/:articleId', getMiddlewareFunction(getWellnessEntry, 'articleId'));
 
-const getMiddlewareFunction = (retrieveContent, contentIdParameter) => {
+function getMiddlewareFunction (retrieveContent, contentIdParameter) {
 	return (req, res, next) => {
 		const contentId = (contentIdParameter) ? req.params[contentIdParameter] : null;
 		retrieveContent(contentId)
@@ -42,7 +42,7 @@ const getMiddlewareFunction = (retrieveContent, contentIdParameter) => {
  * CONTENT RETRIEVAL
  *********************/
 
-const getTableOfContents = () => {
+function getTableOfContents() {
 	//unfortunately, getentry does not allow use of the include parameter so we will use getEntries
 	return textbookClient.getEntries({'sys.id': keys.textbook_id, include: 2}).then(function(response){
 		const theTextbook = response.items[0];
@@ -72,7 +72,7 @@ const getTableOfContents = () => {
 	});
 }
 
-const getFullTextbook = () => {
+function getFullTextbook() {
 	//unfortunately, getentry does not allow use of the include parameter so we will use getEntries
 	return textbookClient.getEntries({'sys.id': keys.textbook_id, include: 2}).then(function(response){
 		const theTextbook = response.items[0];
@@ -93,12 +93,12 @@ const getFullTextbook = () => {
 	});
 }
 
-const getTextbookEntry = (entryId) => {
+function getTextbookEntry(entryId) {
 	return getContentfulEntry(textbookClient, entryId, getEntryHtml);
 }
 
 
-const getCommunityNewsletters = () => {
+function getCommunityNewsletters() {
 	return communityClient.getEntries({'content_type': 'newsletter', 'order' : 'fields.date'}).then(function(response){
 		const newsletters = response.items.map(function(newsletter){
 			return {title: newsletter.fields.title, id: newsletter.sys.id, date: newsletter.fields.date};
@@ -127,15 +127,15 @@ const getCommunityNewsletters = () => {
 	})
 }
 
-const getCommunityEntry = (entryId) => {
+function getCommunityEntry(entryId) {
 	return getContentfulEntry(communityClient, entryId, getEntryJson);
 }
 
-const getWellnessEntry = (entryId) => {
+function getWellnessEntry(entryId) {
 	return getContentfulEntry(wellnessClient, entryId, getEntryJson);
 }
 
-const getContentfulEntry = (client, entryId, callback) => {
+function getContentfulEntry(client, entryId, callback) {
 	return client.getEntry(entryId)
 		.then(callback)
 		.catch(e => { return e; });
@@ -149,7 +149,7 @@ const textbookClient = getContentfulClient(keys.textbook_space_id, keys.textbook
 const communityClient = getContentfulClient(keys.community_space_id, keys.community_delivery_key);
 const wellnessClient = getContentfulClient(keys.wellness_space_id, keys.wellness_delivery_key);
 
-const getContentfulClient = (space, accessToken) {
+function getContentfulClient(space, accessToken) {
 	return contentful.createClient({
 		space: space,
 		accessToken: accessToken,
@@ -160,13 +160,13 @@ const getContentfulClient = (space, accessToken) {
  * CONTENT FORMATTING
  *********************/
 
-const getEntryHtml = entry => {
+function getEntryHtml(entry) {
 	const info = entry.fields;
 	const bodyHTML = convertMarkdownToHTML(info.body);
 	return bodyHTML;
 }
 
-const getEntryJson = entry => {
+function getEntryJson(entry) {
 	const info = entry.fields;
 	const title = info.title;
 	const body = info.body;
@@ -175,7 +175,7 @@ const getEntryJson = entry => {
 	return {title, body:bodyHTML, date};
 }
 
-const convertMarkdownToHTML = (text) =>{
+function convertMarkdownToHTML(text) {
 	return markymark(text).replace(/&amp;/g,'&');
 }
 
