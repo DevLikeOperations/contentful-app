@@ -1,15 +1,8 @@
+const _ = require('underscore');
 const express = require('express');
 const markymark = require('markymark');
-const contentful = require("contentful");
+const contentful = require('contentful');
 const keys = require('../keys');
-const _ = require("underscore");
-
-
-var router = express.Router();
-
-const convertMarkdownToHTML = (text) =>{
-	return markymark(text).replace(/&amp;/g,'&');
-}
 
 //Third party parses MD to HTML
 markymark.setOptions({
@@ -19,21 +12,11 @@ markymark.setOptions({
   smartypants:  true,
 });
 
-//Contentful's own http module
-const textbookClient = contentful.createClient({
-	space: keys.textbook_space_id,
-	accessToken: keys.textbook_delivery_key,
-});
+/*********************
+ * ROUTER CONFIG
+ *********************/
 
-const communityClient = contentful.createClient({
-	space: keys.community_space_id,
-	accessToken: keys.community_delivery_key,
-});
-
-const wellnessClient = contentful.createClient({
-	space: keys.wellness_space_id,
-	accessToken: keys.wellness_delivery_key,
-});
+var router = express.Router();
 
 router.get('/contents', getMiddlewareFunction(getTableOfContents));
 router.get('/textbook', getMiddlewareFunction(getFullTextbook));
@@ -55,29 +38,65 @@ const getMiddlewareFunction = (retrieveContent, contentIdParameter) => {
 	}
 }
 
+/*********************
+ * CONTENT RETRIEVAL
+ *********************/
+
+const getTableOfContents = () => {
+	//unfortunately, getentry does not allow use of the include parameter so we will use getEntries
+	return textbookClient.getEntries({'sys.id': keys.textbook_id, include: 2}).then(function(response){
+		const theTextbook = response.items[0];
+		const chapters = theTextbook.fields.chapters;
+		const tableOfContents = [];
+
+		chapters.forEach(function(chapter){
+			const chapterTitle = chapter.fields.title;
+			const chapterId = chapter.sys.id;
+			const subsections = chapter.fields.subsection.map(function(s){
+				return {title: s.fields.title};
+			});
+
+			tableOfContents.push(
+				{
+					title: chapterTitle,
+					id: chapterId,
+					subsections
+				}
+			);
+
+		});
+		return tableOfContents;
+
+	}).catch(function(e){
+		return e;
+	});
+}
+
+const getFullTextbook = () => {
+	//unfortunately, getentry does not allow use of the include parameter so we will use getEntries
+	return textbookClient.getEntries({'sys.id': keys.textbook_id, include: 2}).then(function(response){
+		const theTextbook = response.items[0];
+		const chapters = theTextbook.fields.chapters;
+		const fullTextbookObjects = [];
+
+		chapters.forEach(function(chapter){
+			const subsections = [];
+			chapter.fields.subsection.forEach(function(subsec){
+				const subsectionBody = convertMarkdownToHTML(subsec.fields.body);
+				subsections.push({id: subsec.sys.id, title: subsec.fields.title, html: subsectionBody});
+			});
+
+			const chapterBody = convertMarkdownToHTML(chapter.fields.body);
+			fullTextbookObjects.push({id: chapter.sys.id, title: chapter.fields.title, html: chapterBody, subsections});
+		});
+		return fullTextbookObjects;
+	});
+}
+
 const getTextbookEntry = (entryId) => {
-	return textbookClient.getEntry(entryId)
-		.then(getEntryHtml)
-		.catch(function(e){
-			return e;
-		});
+	return getContentfulEntry(textbookClient, entryId, getEntryHtml);
 }
 
-const getCommunityEntry = (entryId) => {
-	return communityClient.getEntry(entryId)
-		.then(getEntryJson)
-		.catch(function(e){
-			return e;
-		});
-}
-
-const getWellnessEntry = (entryId) => {
-	return wellnessClient.getEntry(entryId)
-		.then(getEntryJson)
-		.catch(function(e){
-			return e;
-		});
-}
 
 const getCommunityNewsletters = () => {
 	return communityClient.getEntries({'content_type': 'newsletter', 'order' : 'fields.date'}).then(function(response){
@@ -108,13 +127,38 @@ const getCommunityNewsletters = () => {
 	})
 }
 
-const getEntry = (client, entryId) => {
-	return client.getEntry(entryId)
-		.then(getEntryHtml)
-		.catch(function(e){
-			return e;
-		});
+const getCommunityEntry = (entryId) => {
+	return getContentfulEntry(communityClient, entryId, getEntryJson);
 }
+
+const getWellnessEntry = (entryId) => {
+	return getContentfulEntry(wellnessClient, entryId, getEntryJson);
+}
+
+const getContentfulEntry = (client, entryId, callback) => {
+	return client.getEntry(entryId)
+		.then(callback)
+		.catch(e => { return e; });
+}
+
+/*********************
+ * CONTENTFUL CLIENTS
+ *********************/
+
+const textbookClient = getContentfulClient(keys.textbook_space_id, keys.textbook_delivery_key);
+const communityClient = getContentfulClient(keys.community_space_id, keys.community_delivery_key);
+const wellnessClient = getContentfulClient(keys.wellness_space_id, keys.wellness_delivery_key);
+
+const getContentfulClient = (space, accessToken) {
+	return contentful.createClient({
+		space: space,
+		accessToken: accessToken,
+	})
+}
+
+/*********************
+ * CONTENT FORMATTING
+ *********************/
 
 const getEntryHtml = entry => {
 	const info = entry.fields;
@@ -131,62 +175,8 @@ const getEntryJson = entry => {
 	return {title, body:bodyHTML, date};
 }
 
-const getTableOfContents = () => {
-	//unfortunately, getentry does not allow use of the include parameter so we will use getEntries
-	return textbookClient.getEntries({'sys.id': keys.textbook_id, include: 2}).then(function(response){
-		const theTextbook = response.items[0];
-		const chapters = theTextbook.fields.chapters;
-
-		const tableOfContents = [];
-
-		chapters.forEach(function(chapter){
-			const chapterTitle = chapter.fields.title;
-			const chapterId = chapter.sys.id;
-
-			const subsections = chapter.fields.subsection.map(function(s){
-				return {title: s.fields.title};
-			});
-
-			tableOfContents.push(
-				{
-					title: chapterTitle,
-					id: chapterId,
-					subsections
-				}
-			);
-
-		});
-		return tableOfContents;
-
-	}).catch(function(e){
-		return e;
-	});
+const convertMarkdownToHTML = (text) =>{
+	return markymark(text).replace(/&amp;/g,'&');
 }
-
-const getFullTextbook = () => {
-	//unfortunately, getentry does not allow use of the include parameter so we will use getEntries
-	return textbookClient.getEntries({'sys.id': keys.textbook_id, include: 2}).then(function(response){
-		const theTextbook = response.items[0];
-		const chapters = theTextbook.fields.chapters;
-
-		const fullTextbookObjects = [];
-
-		chapters.forEach(function(chapter){
-			const subsections = [];
-			chapter.fields.subsection.forEach(function(subsec){
-				const subsectionBody = convertMarkdownToHTML(subsec.fields.body);
-				subsections.push({id: subsec.sys.id, title: subsec.fields.title, html: subsectionBody});
-			});
-
-			const chapterBody = convertMarkdownToHTML(chapter.fields.body);
-			fullTextbookObjects.push({id: chapter.sys.id, title: chapter.fields.title, html: chapterBody, subsections});
-
-
-
-		});
-		return fullTextbookObjects;
-	});
-}
-
 
 module.exports = router;
