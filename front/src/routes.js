@@ -5,6 +5,7 @@ import TableOfContents from './TableOfContents.jsx';
 import TextbookContent from './TextbookContent.jsx';
 import FullTextbook from './FullTextbook.jsx';
 import CommunityArticle from './CommunityArticle.jsx';
+import WellnessArticle from './WellnessArticle.jsx';
 import CommunityNewsletterArchive from './CommunityNewsletterArchive.jsx';
 import CommunityNewsletter from './CommunityNewsletter.jsx';
 
@@ -17,9 +18,10 @@ const Routes = (props) => (
 	   	<Route path="/textbook" component={FullTextbook} />
 	   	<Route path="/contents" component={TableOfContents} />
 		<Route path="/chapter/:id" component={TextbookContent} />
-		<Route exact path="/community/newsletters" component={CommunityNewsletterArchive}/>
-		<Route path="/community/newsletters/:id" component={CommunityNewsletter}/>
-		<Route path="/community/:id" component={CommunityArticle}/>
+		<Route exact path="/community/newsletters" component={CommunityNewsletterArchive} />
+		<Route path="/community/newsletters/:id" component={CommunityNewsletter} />
+		<Route path="/community/:id" component={CommunityArticle} />
+        <Route path="/wellness/:id" component={WellnessArticle} />
 	    <Route path="/:id" component={TextbookContent} />
     </Switch>
   </Router>
