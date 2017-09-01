@@ -6,7 +6,7 @@ import './css/ContentfulContent.css';
 
 export default class CommunityArticle extends Component {
 
-	state ={
+	state = {
 		articleContent : '',
 	}
 
@@ -23,10 +23,10 @@ export default class CommunityArticle extends Component {
   render() {
     return (
     	<div className="community contentfulContainer">
-    	  <div>	
+    	    <div>	
     		  {ReactHtmlParser(this.state.articleContent)}
-		</div>
-	</div>
+    		</div>
+    	</div>
     );
   }
 }
