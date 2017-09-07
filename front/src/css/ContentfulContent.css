@@ -14,7 +14,10 @@
 
 #textbookChapters {
 	font-weight: bold;
-	padding: 5px 0px 0px 0px;
+}
+
+#textbookSub {
+	padding: 7px 0px 0px 0px;
 }
 
 div.community a{

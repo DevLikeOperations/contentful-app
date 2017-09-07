@@ -28,7 +28,7 @@ export default class FullTextbook extends Component {
   				return (<li><Link to={`#${subsection.id}`}>{subsection.title}</Link></li>);
   			});
   			return (
-  			<li>
+  			<li id="textbookSub">
 	  			<h3 id="textbookChapters"><Link to={`#${textbookObject.id}`}>{textbookObject.title}</Link></h3>
 	  			<ul>
 	  				{subsectionLinks}
