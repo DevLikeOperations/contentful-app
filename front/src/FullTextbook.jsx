@@ -30,8 +30,8 @@ export default class FullTextbook extends Component {
 			
   			return (
   			<li>
-	  			<b><h3><Link to={`#${textbookObject.id}`}>{textbookObject.title}</Link></h3></b>
 
+	  			<b><h3><Link to={`#${textbookObject.id}`}>{textbookObject.title}</Link></h3></b>
 	  			<ul>
 	  				{subsectionLinks}
 	  			</ul>
