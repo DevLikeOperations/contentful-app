@@ -27,14 +27,12 @@ export default class FullTextbook extends Component {
   			const subsectionLinks = textbookObject.subsections.map(function(subsection){
   				return (<li><Link to={`#${subsection.id}`}>{subsection.title}</Link></li>);
   			});
-			
   			return (
   			<li>
 	  			<h3 id="textbookChapters"><Link to={`#${textbookObject.id}`}>{textbookObject.title}</Link></h3>
 	  			<ul>
 	  				{subsectionLinks}
 	  			</ul>
-	  			<br>
   			</li>);
   		});
 
