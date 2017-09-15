@@ -78,8 +78,10 @@ function getFullTextbook() {
 
 		const theTextbook = response.items[0];
 
-		console.log(theTextbook);
-
+		console.log('theTextbook', theTextbook);
+		console.log('theTextbook.fields', theTextbook.fields);
+		console.log('theTextbook.fields.chapters', theTextbook.fields.chapters);
+		
 		const chapters = theTextbook.fields.chapters;
 		const fullTextbookObjects = [];
 
