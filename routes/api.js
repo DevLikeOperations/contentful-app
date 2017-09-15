@@ -75,6 +75,9 @@ function getTableOfContents() {
 function getFullTextbook() {
 	//unfortunately, getentry does not allow use of the include parameter so we will use getEntries
 	return textbookClient.getEntries({'sys.id': keys.textbook_id, include: 2, locale: keys.locale}).then(function(response){
+
+		console.log(response);
+
 		const theTextbook = response.items[0];
 		const chapters = theTextbook.fields.chapters;
 		const fullTextbookObjects = [];
