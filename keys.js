@@ -5,5 +5,6 @@ module.exports = {
   community_space_id: process.env.COMMUNITY_SPACE_ID,
   community_delivery_key: process.env.COMMUNITY_DELIVERY,
   wellness_delivery_key: process.env.WELLNESS_DELIVERY,
-  wellness_space_id: process.env.WELLNESS_ID
+  wellness_space_id: process.env.WELLNESS_ID,
+  locale: process.env.LOCALE || 'en-US'
 };

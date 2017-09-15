@@ -44,9 +44,9 @@ const cleanEntry = (entry) => {
 	if(!entry.fields.body){
 		return;
 	}
-	//const body = entry.fields.body['en-US'];
+	//const body = entry.fields.body[keys.locale];
 	//const newBody = body.replace(/“|”/g, '"');
-	//entry.fields.body['en-US'] = newBody;
+	//entry.fields.body[keys.locale] = newBody;
 	//entry.update();
 	entry.publish();
 
