@@ -44,7 +44,7 @@ function getMiddlewareFunction (retrieveContent, contentIdParameter) {
 
 function getTableOfContents() {
 	//unfortunately, getentry does not allow use of the include parameter so we will use getEntries
-	return textbookClient.getEntries({'sys.id': keys.textbook_id, include: 2}).then(function(response){
+	return textbookClient.getEntries({'sys.id': keys.textbook_id, include: 2, locale: keys.locale}).then(function(response){
 		const theTextbook = response.items[0];
 		const chapters = theTextbook.fields.chapters;
 		const tableOfContents = [];
@@ -74,7 +74,7 @@ function getTableOfContents() {
 
 function getFullTextbook() {
 	//unfortunately, getentry does not allow use of the include parameter so we will use getEntries
-	return textbookClient.getEntries({'sys.id': keys.textbook_id, include: 2}).then(function(response){
+	return textbookClient.getEntries({'sys.id': keys.textbook_id, include: 2, locale: keys.locale}).then(function(response){
 		const theTextbook = response.items[0];
 		const chapters = theTextbook.fields.chapters;
 		const fullTextbookObjects = [];
@@ -99,7 +99,7 @@ function getTextbookEntry(entryId) {
 
 
 function getCommunityNewsletters() {
-	return communityClient.getEntries({'content_type': 'newsletter', 'order' : 'fields.date'}).then(function(response){
+	return communityClient.getEntries({'content_type': 'newsletter', 'order' : 'fields.date', locale: keys.locale}).then(function(response){
 		const newsletters = response.items.map(function(newsletter){
 			return {title: newsletter.fields.title, id: newsletter.sys.id, date: newsletter.fields.date};
 		});
@@ -136,7 +136,7 @@ function getWellnessEntry(entryId) {
 }
 
 function getContentfulEntry(client, entryId, callback) {
-	return client.getEntry(entryId)
+	return client.getEntry(entryId, { locale: keys.locale })
 		.then(callback)
 		.catch(e => { return e; });
 }
