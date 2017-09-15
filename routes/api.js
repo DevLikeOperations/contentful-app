@@ -77,18 +77,16 @@ function getFullTextbook() {
 	return textbookClient.getEntries({'sys.id': keys.textbook_id, include: 2, locale: keys.locale}).then(function(response){
 
 		const theTextbook = response.items[0];
-
-		console.log('theTextbook', theTextbook);
-		console.log('theTextbook.fields', theTextbook.fields);
-		console.log('theTextbook.fields.chapters', theTextbook.fields.chapters);
-		
 		const chapters = theTextbook.fields.chapters;
 		const fullTextbookObjects = [];
 
 		chapters.forEach(function(chapter){
 			const subsections = [];
 			chapter.fields.subsection.forEach(function(subsec){
+				console.log(subsec);
+				console.log('subsec.fields.body', subsec.fields.body);
 				const subsectionBody = convertMarkdownToHTML(subsec.fields.body);
+				console.log('html version', subsectionBody);
 				subsections.push({id: subsec.sys.id, title: subsec.fields.title, html: subsectionBody});
 			});
 
